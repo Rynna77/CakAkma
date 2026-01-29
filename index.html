@@ -3,181 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Flux Calculator</title>
+    <title>Pro Flux Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         :root {
-            /* Light Theme Variables */
+            /* Light Theme */
             --bg-color: #e0e5ec;
-            --calc-bg: rgba(255, 255, 255, 0.7);
+            --calc-bg: rgba(255, 255, 255, 0.75);
             --text-main: #2d3436;
             --text-sec: #636e72;
-            --btn-bg: rgba(255, 255, 255, 0.5);
-            --btn-hover: rgba(255, 255, 255, 0.8);
+            --btn-bg: rgba(255, 255, 255, 0.6);
             --operator-color: #0984e3;
+            --special-color: #6c5ce7; /* Warna untuk kurung/sci */
             --equal-bg: #0984e3;
             --equal-text: #fff;
-            --shadow-light: -8px -8px 20px #ffffff;
-            --shadow-dark: 8px 8px 20px #babecc;
-            --blur: 20px;
+            --shadow-light: -6px -6px 16px #ffffff;
+            --shadow-dark: 6px 6px 16px #babecc;
+            --blur: 25px;
         }
 
         [data-theme="dark"] {
-            /* Dark Theme Variables */
+            /* Dark Theme */
             --bg-color: #1e1e1e;
-            --calc-bg: rgba(30, 30, 30, 0.7);
+            --calc-bg: rgba(30, 30, 30, 0.8);
             --text-main: #dfe6e9;
             --text-sec: #b2bec3;
             --btn-bg: rgba(255, 255, 255, 0.05);
-            --btn-hover: rgba(255, 255, 255, 0.1);
             --operator-color: #74b9ff;
+            --special-color: #a29bfe;
             --equal-bg: #74b9ff;
             --equal-text: #2d3436;
-            --shadow-light: -5px -5px 15px rgba(255,255,255, 0.05);
-            --shadow-dark: 5px 5px 15px rgba(0,0,0, 0.5);
+            --shadow-light: -4px -4px 12px rgba(255,255,255, 0.05);
+            --shadow-dark: 4px 4px 12px rgba(0,0,0, 0.5);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s ease;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; transition: all 0.25s ease; }
 
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: var(--bg-color);
-            overflow: hidden;
-            position: relative;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; background-color: var(--bg-color);
+            overflow: hidden; position: relative;
         }
 
-        /* Background Abstract Shapes for Aesthetics */
-        .circle {
-            position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #0984e3, #00b894);
-            z-index: -1;
-        }
-        .c1 { width: 300px; height: 300px; top: -50px; left: -50px; opacity: 0.4; }
-        .c2 { width: 200px; height: 200px; bottom: -50px; right: -50px; background: linear-gradient(135deg, #e17055, #d63031); opacity: 0.4; }
+        /* Abstract Background */
+        .circle { position: absolute; border-radius: 50%; z-index: -1; }
+        .c1 { width: 300px; height: 300px; top: -50px; left: -50px; background: linear-gradient(135deg, #0984e3, #00b894); opacity: 0.4; }
+        .c2 { width: 250px; height: 250px; bottom: -50px; right: -50px; background: linear-gradient(135deg, #6c5ce7, #fd79a8); opacity: 0.4; }
 
         .calculator {
-            width: 350px;
+            width: 360px;
             background: var(--calc-bg);
             backdrop-filter: blur(var(--blur));
             -webkit-backdrop-filter: blur(var(--blur));
             border-radius: 30px;
             padding: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
             border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .header h3 {
-            font-size: 14px;
-            color: var(--text-sec);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .header h3 { font-size: 14px; color: var(--text-sec); text-transform: uppercase; letter-spacing: 1.5px; }
+        
         .theme-toggle {
-            cursor: pointer;
-            color: var(--text-main);
-            font-size: 18px;
-            background: var(--btn-bg);
-            padding: 8px;
-            border-radius: 50%;
+            cursor: pointer; color: var(--text-main); font-size: 16px;
+            background: var(--btn-bg); padding: 8px; border-radius: 50%;
             box-shadow: var(--shadow-dark);
         }
 
-        .display {
-            text-align: right;
-            margin-bottom: 25px;
-            padding: 0 10px;
-        }
-
-        #history-screen {
-            font-size: 14px;
-            color: var(--text-sec);
-            min-height: 20px;
-            margin-bottom: 5px;
-        }
-
-        #result-screen {
-            font-size: 48px;
-            color: var(--text-main);
-            font-weight: 600;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-        
-        /* Hide scrollbar for clean look */
+        .display { text-align: right; margin-bottom: 20px; padding: 0 5px; }
+        #history-screen { font-size: 13px; color: var(--text-sec); min-height: 20px; margin-bottom: 2px; letter-spacing: 1px; }
+        #result-screen { font-size: 42px; color: var(--text-main); font-weight: 600; overflow-x: auto; white-space: nowrap; }
         #result-screen::-webkit-scrollbar { display: none; }
 
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
+        .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 
         button {
-            height: 60px;
-            width: 60px;
-            border-radius: 20px;
-            border: none;
-            outline: none;
-            font-size: 18px;
-            font-weight: 500;
-            background: var(--btn-bg);
-            color: var(--text-main);
+            height: 52px; width: 100%; /* Responsive width */
+            border-radius: 16px; border: none; outline: none;
+            font-size: 18px; font-weight: 500;
+            background: var(--btn-bg); color: var(--text-main);
             cursor: pointer;
             box-shadow: var(--shadow-dark), var(--shadow-light);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: auto;
         }
 
-        button:active {
-            box-shadow: inset 5px 5px 10px rgba(0,0,0,0.1), inset -5px -5px 10px rgba(255,255,255,0.1);
-            transform: scale(0.95);
-        }
+        button:active { transform: scale(0.97); box-shadow: inset 4px 4px 8px rgba(0,0,0,0.1); }
 
-        .btn-operator {
-            color: var(--operator-color);
-            font-weight: 600;
-        }
-
-        .btn-sci {
-            font-size: 14px;
-            color: var(--text-sec);
-        }
-
-        .btn-clear {
-            color: #d63031;
-        }
-
-        .btn-equal {
-            background: var(--equal-bg);
-            color: var(--equal-text);
-            box-shadow: 0 5px 15px rgba(9, 132, 227, 0.3);
-        }
-        
-        .btn-equal:hover {
-            filter: brightness(1.1);
-        }
+        .btn-op { color: var(--operator-color); font-weight: 600; font-size: 20px; }
+        .btn-sci { color: var(--special-color); font-size: 15px; font-weight: 600; }
+        .btn-clear { color: #d63031; font-weight: 600; }
+        .btn-equal { background: var(--equal-bg); color: var(--equal-text); }
+        .span-2 { grid-column: span 2; width: 100%; border-radius: 20px; } /* Untuk tombol 0 yang lebar */
 
     </style>
 </head>
@@ -188,7 +105,7 @@
 
     <div class="calculator">
         <div class="header">
-            <h3>Scientific</h3>
+            <h3>Scientific FX</h3>
             <div class="theme-toggle" onclick="toggleTheme()">
                 <i class="fas fa-moon" id="theme-icon"></i>
             </div>
@@ -202,33 +119,36 @@
         <div class="buttons">
             <button class="btn-clear" onclick="clearScreen()">AC</button>
             <button class="btn-clear" onclick="deleteChar()"><i class="fas fa-backspace"></i></button>
-            <button class="btn-sci" onclick="appendValue('%')">%</button>
-            <button class="btn-operator" onclick="appendValue('/')">÷</button>
+            <button class="btn-sci" onclick="appendValue('(')">(</button>
+            <button class="btn-sci" onclick="appendValue(')')">)</button>
+
+            <button class="btn-sci" onclick="appendFunc('sqrt')">√</button>
+            <button class="btn-sci" onclick="appendValue('^')">^</button>
+            <button class="btn-sci" onclick="appendFunc('log')">log</button>
+            <button class="btn-op" onclick="appendValue('/')">÷</button>
 
             <button class="btn-sci" onclick="appendFunc('sin')">sin</button>
             <button class="btn-sci" onclick="appendFunc('cos')">cos</button>
             <button class="btn-sci" onclick="appendFunc('tan')">tan</button>
-            <button class="btn-operator" onclick="appendValue('*')">×</button>
+            <button class="btn-op" onclick="appendValue('*')">×</button>
 
             <button onclick="appendValue('7')">7</button>
             <button onclick="appendValue('8')">8</button>
             <button onclick="appendValue('9')">9</button>
-            <button class="btn-operator" onclick="appendValue('-')">−</button>
+            <button class="btn-op" onclick="appendValue('-')">−</button>
 
             <button onclick="appendValue('4')">4</button>
             <button onclick="appendValue('5')">5</button>
             <button onclick="appendValue('6')">6</button>
-            <button class="btn-operator" onclick="appendValue('+')">+</button>
+            <button class="btn-op" onclick="appendValue('+')">+</button>
 
             <button onclick="appendValue('1')">1</button>
             <button onclick="appendValue('2')">2</button>
             <button onclick="appendValue('3')">3</button>
-            <button class="btn-sci" onclick="appendValue('3.14159')">π</button>
-
-            <button class="btn-sci" onclick="appendFunc('sqrt')">√</button>
+            <button class="btn-equal" onclick="calculate()">=</button> <button onclick="appendValue('%')">%</button>
             <button onclick="appendValue('0')">0</button>
             <button onclick="appendValue('.')">.</button>
-            <button class="btn-equal" onclick="calculate()">=</button>
+            <button class="btn-sci" onclick="appendValue('3.14159')">π</button>
         </div>
     </div>
 
@@ -238,74 +158,56 @@
         const themeIcon = document.getElementById('theme-icon');
         
         let currentInput = "0";
-        let expression = ""; // Used for the actual JS math calculation
         let isResultDisplayed = false;
 
         // --- Theme Logic ---
         function toggleTheme() {
             const body = document.body;
-            const currentTheme = body.getAttribute('data-theme');
-            
-            if (currentTheme === 'dark') {
+            if (body.getAttribute('data-theme') === 'dark') {
                 body.setAttribute('data-theme', 'light');
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
             } else {
                 body.setAttribute('data-theme', 'dark');
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
             }
         }
 
         // --- Calculator Logic ---
-
         function updateDisplay() {
-            // Format numbers nicely with commas if possible, but raw for now to avoid logic errors
+            // Menampilkan simbol visual untuk user, tapi JS tetap simpan nilai asli
             resultScreen.innerText = currentInput;
         }
 
         function appendValue(val) {
             if (isResultDisplayed) {
-                currentInput = "";
-                expression = "";
-                isResultDisplayed = false;
+                // Jika hasil baru ditampilkan dan user ketik angka, reset.
+                // Jika user ketik operator, lanjutkan perhitungan.
+                if ("+-*/^%".includes(val)) {
+                    isResultDisplayed = false; 
+                } else {
+                    currentInput = "";
+                    isResultDisplayed = false;
+                }
             }
-
-            if (currentInput === "0" && val !== ".") {
-                currentInput = val;
-                expression = val;
-            } else {
-                currentInput += val;
-                expression += val;
-            }
+            if (currentInput === "0" && val !== ".") currentInput = val;
+            else currentInput += val;
             updateDisplay();
         }
 
         function appendFunc(func) {
             if (isResultDisplayed) {
-                expression = currentInput; // Use previous result
                 isResultDisplayed = false;
-            }
-            
-            if (currentInput === "0") {
-                currentInput = func + "(";
+                // Bungkus hasil sebelumnya misal: sqrt(ANS)
+                currentInput = func + "(" + currentInput + ")"; 
             } else {
-                currentInput += func + "(";
+                if (currentInput === "0") currentInput = func + "(";
+                else currentInput += func + "(";
             }
-
-            // Map visual function to JS Math function
-            if (func === 'sin') expression += 'Math.sin(';
-            else if (func === 'cos') expression += 'Math.cos(';
-            else if (func === 'tan') expression += 'Math.tan(';
-            else if (func === 'sqrt') expression += 'Math.sqrt(';
-            else if (func === 'log') expression += 'Math.log10(';
-            
             updateDisplay();
         }
 
         function clearScreen() {
             currentInput = "0";
-            expression = "";
             historyScreen.innerText = "";
             isResultDisplayed = false;
             updateDisplay();
@@ -318,39 +220,44 @@
             }
             if (currentInput.length > 1) {
                 currentInput = currentInput.slice(0, -1);
-                expression = expression.slice(0, -1);
             } else {
                 currentInput = "0";
-                expression = "";
             }
             updateDisplay();
         }
 
         function calculate() {
             try {
-                // Move current input to history
                 historyScreen.innerText = currentInput;
-
-                // Sanitize and Calculate
-                // Note: eval is used here for client-side simplicity. 
-                // For production web apps, use a math parser library.
                 
-                // Replace visual symbols with JS operators
-                let evalString = expression
+                // --- Pre-Processing untuk Matematika ---
+                // Mengubah simbol visual menjadi sintaks JavaScript yang valid
+                let expression = currentInput
                     .replace(/×/g, '*')
-                    .replace(/÷/g, '/');
+                    .replace(/÷/g, '/')
+                    .replace(/\^/g, '**')   // Mengubah ^ menjadi pangkat JS
+                    .replace(/sin\(/g, 'Math.sin(')
+                    .replace(/cos\(/g, 'Math.cos(')
+                    .replace(/tan\(/g, 'Math.tan(')
+                    .replace(/sqrt\(/g, 'Math.sqrt(')
+                    .replace(/log\(/g, 'Math.log10(');
 
-                let result = eval(evalString);
+                // Menangani implicit multiplication (misal: 5(2) menjadi 5*(2))
+                // Regex ini mencari angka diikuti langsung tanda kurung buka
+                expression = expression.replace(/(\d)(\()/g, '$1*$2');
 
-                // Handle decimals (limit to 8 places)
+                let result = eval(expression);
+
+                if (!Number.isFinite(result)) {
+                    throw new Error("Invalid");
+                }
+
+                // Format desimal
                 if (!Number.isInteger(result)) {
-                    result = result.toFixed(8);
-                    // Remove trailing zeros
-                    result = parseFloat(result); 
+                    result = parseFloat(result.toFixed(8));
                 }
 
                 currentInput = result.toString();
-                expression = result.toString();
                 isResultDisplayed = true;
                 updateDisplay();
 
