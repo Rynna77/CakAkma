@@ -1,273 +1,467 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Flux Calculator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kampanye Kebersihan Lingkungan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
     
-    <style>
-        :root {
-            /* Light Theme */
-            --bg-color: #e0e5ec;
-            --calc-bg: rgba(255, 255, 255, 0.75);
-            --text-main: #2d3436;
-            --text-sec: #636e72;
-            --btn-bg: rgba(255, 255, 255, 0.6);
-            --operator-color: #0984e3;
-            --special-color: #6c5ce7; /* Warna untuk kurung/sci */
-            --equal-bg: #0984e3;
-            --equal-text: #fff;
-            --shadow-light: -6px -6px 16px #ffffff;
-            --shadow-dark: 6px 6px 16px #babecc;
-            --blur: 25px;
-        }
-
-        [data-theme="dark"] {
-            /* Dark Theme */
-            --bg-color: #1e1e1e;
-            --calc-bg: rgba(30, 30, 30, 0.8);
-            --text-main: #dfe6e9;
-            --text-sec: #b2bec3;
-            --btn-bg: rgba(255, 255, 255, 0.05);
-            --operator-color: #74b9ff;
-            --special-color: #a29bfe;
-            --equal-bg: #74b9ff;
-            --equal-text: #2d3436;
-            --shadow-light: -4px -4px 12px rgba(255,255,255, 0.05);
-            --shadow-dark: 4px 4px 12px rgba(0,0,0, 0.5);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; transition: all 0.25s ease; }
-
-        body {
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; background-color: var(--bg-color);
-            overflow: hidden; position: relative;
-        }
-
-        /* Abstract Background */
-        .circle { position: absolute; border-radius: 50%; z-index: -1; }
-        .c1 { width: 300px; height: 300px; top: -50px; left: -50px; background: linear-gradient(135deg, #0984e3, #00b894); opacity: 0.4; }
-        .c2 { width: 250px; height: 250px; bottom: -50px; right: -50px; background: linear-gradient(135deg, #6c5ce7, #fd79a8); opacity: 0.4; }
-
-        .calculator {
-            width: 360px;
-            background: var(--calc-bg);
-            backdrop-filter: blur(var(--blur));
-            -webkit-backdrop-filter: blur(var(--blur));
-            border-radius: 30px;
-            padding: 25px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .header h3 { font-size: 14px; color: var(--text-sec); text-transform: uppercase; letter-spacing: 1.5px; }
-        
-        .theme-toggle {
-            cursor: pointer; color: var(--text-main); font-size: 16px;
-            background: var(--btn-bg); padding: 8px; border-radius: 50%;
-            box-shadow: var(--shadow-dark);
-        }
-
-        .display { text-align: right; margin-bottom: 20px; padding: 0 5px; }
-        #history-screen { font-size: 13px; color: var(--text-sec); min-height: 20px; margin-bottom: 2px; letter-spacing: 1px; }
-        #result-screen { font-size: 42px; color: var(--text-main); font-weight: 600; overflow-x: auto; white-space: nowrap; }
-        #result-screen::-webkit-scrollbar { display: none; }
-
-        .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-
-        button {
-            height: 52px; width: 100%; /* Responsive width */
-            border-radius: 16px; border: none; outline: none;
-            font-size: 18px; font-weight: 500;
-            background: var(--btn-bg); color: var(--text-main);
-            cursor: pointer;
-            box-shadow: var(--shadow-dark), var(--shadow-light);
-        }
-
-        button:active { transform: scale(0.97); box-shadow: inset 4px 4px 8px rgba(0,0,0,0.1); }
-
-        .btn-op { color: var(--operator-color); font-weight: 600; font-size: 20px; }
-        .btn-sci { color: var(--special-color); font-size: 15px; font-weight: 600; }
-        .btn-clear { color: #d63031; font-weight: 600; }
-        .btn-equal { background: var(--equal-bg); color: var(--equal-text); }
-        .span-2 { grid-column: span 2; width: 100%; border-radius: 20px; } /* Untuk tombol 0 yang lebar */
-
-    </style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-5deg); }
+      75% { transform: rotate(5deg); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+    
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .slide-in {
+      animation: slideInLeft 0.8s ease-out forwards;
+    }
+    
+    .leaf-icon {
+      display: inline-block;
+      font-size: 2rem;
+      margin: 0 0.5rem;
+    }
+    
+    .quiz-option {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .quiz-option:hover {
+      transform: translateX(10px);
+    }
+    
+    .quiz-option.selected {
+      transform: scale(1.02);
+    }
+    
+    .quiz-option.correct {
+      animation: pulse 0.5s ease;
+    }
+    
+    .quiz-option.wrong {
+      animation: shake 0.5s ease;
+    }
+    
+    .progress-bar {
+      transition: width 0.4s ease;
+    }
+    
+    .score-badge {
+      animation: pulse 1s ease infinite;
+    }
+  </style>
 </head>
-<body>
-
-    <div class="circle c1"></div>
-    <div class="circle c2"></div>
-
-    <div class="calculator">
-        <div class="header">
-            <h3>Scientific FX</h3>
-            <div class="theme-toggle" onclick="toggleTheme()">
-                <i class="fas fa-moon" id="theme-icon"></i>
-            </div>
+<body class="h-full">
+  <div id="app" class="w-full h-full overflow-auto">
+    <!-- Landing Page -->
+    <div id="landingPage" class="min-h-full w-full flex flex-col">
+      <div class="flex-1 flex items-center justify-center px-6 py-12" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <div class="max-w-4xl w-full text-center">
+          <div class="float-animation mb-8">
+            <span class="leaf-icon">🌿</span>
+            <span class="leaf-icon">🌍</span>
+            <span class="leaf-icon">♻️</span>
+          </div>
+          
+          <h1 id="mainTitle" class="text-6xl font-bold mb-6 fade-in" style="color: #ffffff; animation-delay: 0.1s;">
+            Bersama Jaga Bumi Kita
+          </h1>
+          
+          <p id="mainSubtitle" class="text-2xl mb-12 fade-in" style="color: #d1fae5; animation-delay: 0.2s;">
+            Mari bersama-sama menjaga kebersihan lingkungan untuk masa depan yang lebih hijau
+          </p>
+          
+          <button id="startButton" class="px-12 py-4 text-xl font-semibold rounded-full transition-all duration-300 fade-in shadow-lg hover:shadow-xl transform hover:scale-105" style="background-color: #ffffff; color: #059669; animation-delay: 0.3s;">
+            Mulai Sekarang
+          </button>
         </div>
-
-        <div class="display">
-            <div id="history-screen"></div>
-            <div id="result-screen">0</div>
-        </div>
-
-        <div class="buttons">
-            <button class="btn-clear" onclick="clearScreen()">AC</button>
-            <button class="btn-clear" onclick="deleteChar()"><i class="fas fa-backspace"></i></button>
-            <button class="btn-sci" onclick="appendValue('(')">(</button>
-            <button class="btn-sci" onclick="appendValue(')')">)</button>
-
-            <button class="btn-sci" onclick="appendFunc('sqrt')">√</button>
-            <button class="btn-sci" onclick="appendValue('^')">^</button>
-            <button class="btn-sci" onclick="appendFunc('log')">log</button>
-            <button class="btn-op" onclick="appendValue('/')">÷</button>
-
-            <button class="btn-sci" onclick="appendFunc('sin')">sin</button>
-            <button class="btn-sci" onclick="appendFunc('cos')">cos</button>
-            <button class="btn-sci" onclick="appendFunc('tan')">tan</button>
-            <button class="btn-op" onclick="appendValue('*')">×</button>
-
-            <button onclick="appendValue('7')">7</button>
-            <button onclick="appendValue('8')">8</button>
-            <button onclick="appendValue('9')">9</button>
-            <button class="btn-op" onclick="appendValue('-')">−</button>
-
-            <button onclick="appendValue('4')">4</button>
-            <button onclick="appendValue('5')">5</button>
-            <button onclick="appendValue('6')">6</button>
-            <button class="btn-op" onclick="appendValue('+')">+</button>
-
-            <button onclick="appendValue('1')">1</button>
-            <button onclick="appendValue('2')">2</button>
-            <button onclick="appendValue('3')">3</button>
-            <button class="btn-equal" onclick="calculate()">=</button> <button onclick="appendValue('%')">%</button>
-            <button onclick="appendValue('0')">0</button>
-            <button onclick="appendValue('.')">.</button>
-            <button class="btn-sci" onclick="appendValue('3.14159')">π</button>
-        </div>
+      </div>
+      
+      <footer class="py-6 text-center" style="background-color: #047857; color: #d1fae5;">
+        <p id="creatorLabel" class="text-sm mb-2 font-medium">Dibuat oleh:</p>
+        <p id="creatorName1" class="text-lg font-semibold" style="color: #ffffff;">Ahmad Jauharul</p>
+        <p class="text-sm" style="color: #d1fae5;">&</p>
+        <p id="creatorName2" class="text-lg font-semibold" style="color: #ffffff;">Muhammad Zubair Akma</p>
+      </footer>
     </div>
 
-    <script>
-        const resultScreen = document.getElementById('result-screen');
-        const historyScreen = document.getElementById('history-screen');
-        const themeIcon = document.getElementById('theme-icon');
-        
-        let currentInput = "0";
-        let isResultDisplayed = false;
+    <!-- Article Page -->
+    <div id="articlePage" class="min-h-full w-full f<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kampanye Kebersihan Lingkungan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-5deg); }
+      75% { transform: rotate(5deg); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+    
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .slide-in {
+      animation: slideInLeft 0.8s ease-out forwards;
+    }
+    
+    .leaf-icon {
+      display: inline-block;
+      font-size: 2rem;
+      margin: 0 0.5rem;
+    }
+    
+    .quiz-option {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .quiz-option:hover {
+      transform: translateX(10px);
+    }
+    
+    .quiz-option.selected {
+      transform: scale(1.02);
+    }
+    
+    .quiz-option.correct {
+      animation: pulse 0.5s ease;
+    }
+    
+    .quiz-option.wrong {
+      animation: shake 0.5s ease;
+    }
+    
+    .progress-bar {
+      transition: width 0.4s ease;
+    }
+    
+    .score-badge {
+      animation: pulse 1s ease infinite;
+    }
+  </style>
+</head>
+<body class="h-full">
+  <div id="app" class="w-full h-full overflow-auto">
+    <!-- Landing Page -->
+    <div id="landingPage" class="min-h-full w-full flex flex-col">
+      <div class="flex-1 flex items-center justify-center px-6 py-12" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <div class="max-w-4xl w-full text-center">
+          <div class="float-animation mb-8">
+            <span class="leaf-icon">🌿</span>
+            <span class="leaf-icon">🌍</span>
+            <span class="leaf-icon">♻️</span>
+          </div>
+          
+          <h1 id="mainTitle" class="text-6xl font-bold mb-6 fade-in" style="color: #ffffff; animation-delay: 0.1s;">
+            Bersama Jaga Bumi Kita
+          </h1>
+          
+          <p id="mainSubtitle" class="text-2xl mb-12 fade-in" style="color: #d1fae5; animation-delay: 0.2s;">
+            Mari bersama-sama menjaga kebersihan lingkungan untuk masa depan yang lebih hijau
+          </p>
+          
+          <button id="startButton" class="px-12 py-4 text-xl font-semibold rounded-full transition-all duration-300 fade-in shadow-lg hover:shadow-xl transform hover:scale-105" style="background-color: #ffffff; color: #059669; animation-delay: 0.3s;">
+            Mulai Sekarang
+          </button>
+        </div>
+      </div>
+      
+      <footer class="py-6 text-center" style="background-color: #047857; color: #d1fae5;">
+        <p id="creatorLabel" class="text-sm mb-2 font-medium">Dibuat oleh:</p>
+        <p id="creatorName1" class="text-lg font-semibold" style="color: #ffffff;">Ahmad Jauharul</p>
+        <p class="text-sm" style="color: #d1fae5;">&</p>
+        <p id="creatorName2" class="text-lg font-semibold" style="color: #ffffff;">Muhammad Zubair Akma</p>
+      </footer>
+    </div>
 
-        // --- Theme Logic ---
-        function toggleTheme() {
-            const body = document.body;
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                themeIcon.classList.replace('fa-sun', 'fa-moon');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                themeIcon.classList.replace('fa-moon', 'fa-sun');
-            }
-        }
+    <!-- Article Page -->
+    <div id="articlePage" class="min-h-full w-full flex flex-col" style="display: none; background-color: #f0fdf4;">
+      <header class="py-6 px-6 shadow-md" style="background-color: #10b981;">
+        <button id="backButton" class="px-6 py-2 rounded-lg font-medium transition-all duration-300 hover:shadow-lg" style="background-color: #ffffff; color: #059669;">
+          ← Kembali
+        </button>
+      </header>
+      
+      <main class="flex-1 px-6 py-12">
+        <article class="max-w-4xl mx-auto">
+          <div class="text-center mb-12">
+            <div class="text-6xl mb-6">🌱</div>
+            <h1 id="articleTitle" class="text-5xl font-bold mb-4" style="color: #065f46;">
+              Kampanye Kebersihan Lingkungan
+            </h1>
+            <div class="w-24 h-1 mx-auto rounded-full" style="background-color: #10b981;"></div>
+          </div>
+          
+          <div class="space-y-8 text-lg leading-relaxed" style="color: #064e3b;">
+            <section class="p-8 rounded-2xl shadow-lg" style="background-color: #ffffff;">
+              <h2 class="text-3xl font-bold mb-4 flex items-center" style="color: #059669;">
+                <span class="mr-3">🎯</span> Mengapa Kebersihan Lingkungan Penting?
+              </h2>
+              <p class="mb-4">
+                Kebersihan lingkungan adalah fondasi dari kehidupan yang sehat dan berkelanjutan. Lingkungan yang bersih tidak hanya membuat kita nyaman, tetapi juga melindungi kesehatan kita dari berbagai penyakit.
+              </p>
+              <p>
+                Dengan menjaga kebersihan lingkungan, kita turut berkontribusi dalam melindungi ekosistem, mengurangi polusi, dan menciptakan ruang hidup yang lebih baik untuk generasi mendatang.
+              </p>
+            </section>
 
-        // --- Calculator Logic ---
-        function updateDisplay() {
-            // Menampilkan simbol visual untuk user, tapi JS tetap simpan nilai asli
-            resultScreen.innerText = currentInput;
-        }
+            <section class="p-8 rounded-2xl shadow-lg" style="background-color: #ffffff;">
+              <h2 class="text-3xl font-bold mb-4 flex items-center" style="color: #059669;">
+                <span class="mr-3">♻️</span> Langkah Nyata yang Bisa Dilakukan
+              </h2>
+              <ul class="space-y-3 ml-6">
+                <li class="flex items-start">
+                  <span class="mr-3 text-2xl">✓</span>
+                  <span><strong>Kurangi, Gunakan Ulang, Daur Ulang:</strong> Terapkan prinsip 3R dalam kehidupan sehari-hari untuk mengurangi sampah.</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="mr-3 text-2xl">✓</span>
+                  <span><strong>Pilah Sampah:</strong> Pisahkan sampah organik dan anorganik untuk memudahkan proses daur ulang.</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="mr-3 text-2xl">✓</span>
+                  <span><strong>Hindari Plastik Sekali Pakai:</strong> Gunakan tas belanja yang dapat digunakan kembali dan botol minum yang bisa diisi ulang.</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="mr-3 text-2xl">✓</span>
+                  <span><strong>Gotong Royong Bersih-bersih:</strong> Ikut serta dalam kegiatan bersih-bersih lingkungan bersama warga.</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="mr-3 text-2xl">✓</span>
+                  <span><strong>Tanam Pohon:</strong> Turut berkontribusi dalam penghijauan untuk lingkungan yang lebih asri.</span>
+                </li>
+              </ul>
+            </section>
 
-        function appendValue(val) {
-            if (isResultDisplayed) {
-                // Jika hasil baru ditampilkan dan user ketik angka, reset.
-                // Jika user ketik operator, lanjutkan perhitungan.
-                if ("+-*/^%".includes(val)) {
-                    isResultDisplayed = false; 
-                } else {
-                    currentInput = "";
-                    isResultDisplayed = false;
-                }
-            }
-            if (currentInput === "0" && val !== ".") currentInput = val;
-            else currentInput += val;
-            updateDisplay();
-        }
+            <section class="p-8 rounded-2xl shadow-lg" style="background-color: #ffffff;">
+              <h2 class="text-3xl font-bold mb-4 flex items-center" style="color: #059669;">
+                <span class="mr-3">🌍</span> Dampak Positif untuk Masa Depan
+              </h2>
+              <p class="mb-4">
+                Setiap tindakan kecil yang kita lakukan hari ini akan berdampak besar untuk masa depan. Dengan menjaga kebersihan lingkungan, kita:
+              </p>
+              <ul class="space-y-2 ml-6">
+                <li>• Menciptakan udara yang lebih bersih dan segar</li>
+                <li>• Melindungi sumber air dari pencemaran</li>
+                <li>• Menjaga habitat flora dan fauna</li>
+                <li>• Mengurangi risiko bencana alam</li>
+                <li>• Mewariskan bumi yang lebih baik untuk anak cucu</li>
+              </ul>
+            </section>
 
-        function appendFunc(func) {
-            if (isResultDisplayed) {
-                isResultDisplayed = false;
-                // Bungkus hasil sebelumnya misal: sqrt(ANS)
-                currentInput = func + "(" + currentInput + ")"; 
-            } else {
-                if (currentInput === "0") currentInput = func + "(";
-                else currentInput += func + "(";
-            }
-            updateDisplay();
-        }
+            <section class="p-8 rounded-2xl shadow-lg text-center" style="background-color: #10b981;">
+              <h2 class="text-3xl font-bold mb-4" style="color: #ffffff;">
+                🤝 Mari Bergerak Bersama!
+              </h2>
+              <p class="text-xl mb-6" style="color: #d1fae5;">
+                Perubahan dimulai dari diri sendiri. Mulailah dari hal-hal kecil di sekitar kita. Ajak keluarga, teman, dan tetangga untuk ikut peduli terhadap kebersihan lingkungan. Bersama kita bisa membuat perbedaan!
+              </p>
+              <button id="nextToQuizButton" class="px-10 py-4 text-xl font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105" style="background-color: #ffffff; color: #059669;">
+                Ikuti Kuis & Angket 📝
+              </button>
+            </section>
+          </div>
+        </article>
+      </main>
+      
+      <footer class="py-6 text-center" style="background-color: #047857; color: #d1fae5;">
+        <p id="creatorLabelArticle" class="text-sm mb-2 font-medium">Dibuat oleh:</p>
+        <p id="creatorName1Article" class="text-lg font-semibold" style="color: #ffffff;">Ahmad Jauharul</p>
+        <p class="text-sm" style="color: #d1fae5;">&</p>
+        <p id="creatorName2Article" class="text-lg font-semibold" style="color: #ffffff;">Muhammad Zubair Akma</p>
+      </footer>
+    </div>
 
-        function clearScreen() {
-            currentInput = "0";
-            historyScreen.innerText = "";
-            isResultDisplayed = false;
-            updateDisplay();
-        }
+    <!-- Quiz Page -->
+    <div id="quizPage" class="min-h-full w-full flex flex-col" style="display: none; background-color: #f0fdf4;">
+      <header class="py-6 px-6 shadow-md" style="background-color: #10b981;">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+          <button id="backFromQuizButton" class="px-6 py-2 rounded-lg font-medium transition-all duration-300 hover:shadow-lg" style="background-color: #ffffff; color: #059669;">
+            ← Kembali
+          </button>
+          <div id="scoreDisplay" class="px-6 py-2 rounded-lg font-bold text-xl" style="background-color: #ffffff; color: #059669; display: none;">
+            Skor: <span id="scoreValue">0</span>/10
+          </div>
+        </div>
+      </header>
+      
+      <main class="flex-1 px-6 py-12">
+        <div class="max-w-4xl mx-auto">
+          
+          <!-- Name Input Section -->
+          <div id="nameInputSection" class="text-center">
+            <div class="text-6xl mb-6">👤</div>
+            <h1 id="quizTitle" class="text-5xl font-bold mb-4" style="color: #065f46;">
+              Kuis & Angket Kebersihan Lingkungan
+            </h1>
+            <div class="p-8 rounded-2xl shadow-xl fade-in mx-auto max-w-2xl" style="background-color: #ffffff;">
+              <p class="text-xl mb-6" style="color: #065f46;">
+                Sebelum memulai kuis, silakan masukkan nama Anda:
+              </p>
+              <form id="nameForm" class="space-y-4">
+                <div>
+                  <label for="userName" class="block text-left text-lg font-medium mb-2" style="color: #059669;">
+                    Nama Lengkap
+                  </label>
+                  <input 
+                    type="text" 
+                    id="userName" 
+                    name="userName"
+                    placeholder="Masukkan nama Anda" 
+                    required
+                    class="w-full px-6 py-4 text-lg rounded-xl border-2 border-gray-300 focus:border-green-500 focus:outline-none transition-all"
+                    style="background-color: #f0fdf4;"
+                  />
+                </div>
+                <button 
+                  type="submit"
+                  id="startQuizButton"
+                  class="w-full px-8 py-4 text-xl font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  style="background-color: #10b981; color: #ffffff;"
+                >
+                  Mulai Kuis 🚀
+                </button>
+              </form>
+            </div>
+          </div>
 
-        function deleteChar() {
-            if (isResultDisplayed) {
-                clearScreen();
-                return;
-            }
-            if (currentInput.length > 1) {
-                currentInput = currentInput.slice(0, -1);
-            } else {
-                currentInput = "0";
-            }
-            updateDisplay();
-        }
+          <!-- Quiz Progress Section -->
+          <div id="quizProgressSection" style="display: none;">
+            <div class="text-center mb-8">
+              <div class="text-6xl mb-4">📝</div>
+              <h2 class="text-4xl font-bold mb-4" style="color: #065f46;">
+                Halo, <span id="displayUserName" style="color: #10b981;"></span>!
+              </h2>
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-4">
+                <div id="progressBar" class="progress-bar h-3 rounded-full" style="width: 0%; background-color: #10b981;"></div>
+              </div>
+              <p class="text-lg" style="color: #059669;">
+                Pertanyaan <span id="currentQuestion">1</span> dari 10
+              </p>
+            </div>
 
-        function calculate() {
-            try {
-                historyScreen.innerText = currentInput;
-                
-                // --- Pre-Processing untuk Matematika ---
-                // Mengubah simbol visual menjadi sintaks JavaScript yang valid
-                let expression = currentInput
-                    .replace(/×/g, '*')
-                    .replace(/÷/g, '/')
-                    .replace(/\^/g, '**')   // Mengubah ^ menjadi pangkat JS
-                    .replace(/sin\(/g, 'Math.sin(')
-                    .replace(/cos\(/g, 'Math.cos(')
-                    .replace(/tan\(/g, 'Math.tan(')
-                    .replace(/sqrt\(/g, 'Math.sqrt(')
-                    .replace(/log\(/g, 'Math.log10(');
+            <div id="quizContent" class="space-y-6">
+              <!-- Quiz questions will be inserted here -->
+            </div>
+          </div>
 
-                // Menangani implicit multiplication (misal: 5(2) menjadi 5*(2))
-                // Regex ini mencari angka diikuti langsung tanda kurung buka
-                expression = expression.replace(/(\d)(\()/g, '$1*$2');
+          <!-- Result Section -->
+          <div id="resultSection" class="hidden">
+            <div class="text-center p-12 rounded-2xl shadow-2xl slide-in" style="background-color: #ffffff;">
+              <div id="resultEmoji" class="text-8xl mb-6">🎉</div>
+              <h2 class="text-4xl font-bold mb-2" style="color: #059669;">Selamat, <span id="resultUserName"></span>!</h2>
+              <p class="text-2xl mb-6" style="color: #065f46;">
+                Skor Anda: <span id="finalScore" class="font-bold score-badge" style="color: #10b981;">0</span>/10
+              </p>
+              <div id="resultMessage" class="text-xl mb-8 p-6 rounded-xl" style="background-color: #d1fae5; color: #065f46;">
+              </div>
+              <div class="p-8 rounded-xl mb-8" style="background-color: #ecfdf5;">
+                <h3 class="text-2xl font-bold mb-4" style="color: #059669;">💪 Komitmen Anda:</h3>
+                <p class="text-lg leading-relaxed" style="color: #065f46;">
+                  Terima kasih telah mengikuti kuis ini! Dengan pengetahuan yang Anda miliki, mari bersama-sama menjaga kebersihan lingkungan. 
+                  Mulai dari hal kecil seperti membuang sampah pada tempatnya, mengurangi penggunaan plastik, dan mengajak orang lain untuk peduli lingkungan. 
+                  <strong>Setiap tindakan kecil membuat perbedaan besar!</strong>
+                </p>
+              </div>
+              <div class="flex gap-4 justify-center">
+                <button id="viewLeaderboardButton" class="px-10 py-4 text-xl font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105" style="background-color: #059669; color: #ffffff;">
+                  🏆 Lihat Leaderboard
+                </button>
+                <button id="retakeQuizButton" class="px-10 py-4 text-xl font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105" style="background-color: #10b981; color: #ffffff;">
+                  🔄 Ulangi Kuis
+                </button>
+              </div>
+            </div>
+          </div>
 
-                let result = eval(expression);
+          <!-- Leaderboard Section -->
+          <div id="leaderboardSection" class="hidden">
+            <div class="text-center mb-8">
+              <div class="text-6xl mb-4">🏆</div>
+              <h2 class="text-5xl font-bold mb-4" style="color: #065f46;">
+                Leaderboard
+              </h2>
+              <p class="text-xl" style="color: #059669;">
+                Para Juara Kebersihan Lingkungan
+              </p>
+            </div>
 
-                if (!Number.isFinite(result)) {
-                    throw new Error("Invalid");
-                }
+            <div class="p-8 rounded-2xl shadow-xl" style="background-color: #ffffff;">
+              <div id="leaderboardContent" class="space-y-4">
+                <div class="text-center py-8" style="color: #059669;">
+                  <p class="text-lg">Memuat data leaderboard...</p>
+                </div>
+              </div>
+            </div>
 
-                // Format desimal
-                if (!Number.isInteger(result)) {
-                    result = parseFloat(result.toFixed(8));
-                }
-
-                currentInput = result.toString();
-                isResultDisplayed = true;
-                updateDisplay();
-
-            } catch (error) {
-                resultScreen.innerText = "Error";
-                setTimeout(() => {
-                    clearScreen();
-                }, 1500);
-            }
-        }
-    </script>
-</body>
-</html>
+            <div class="text-center mt-8">
+              <button id="backToResultButton" class="px-10 py-4 text-xl font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105" style="backg
